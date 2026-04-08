@@ -1,0 +1,40 @@
+/* Glass dock — transparent frosted bar (content shows through) */
+.macos-dock-bar {
+  border-radius: 22px;
+  /* Low-opacity fill so background is visible; blur does the “glass” */
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 14px 44px -12px rgba(15, 23, 42, 0.18),
+    0 6px 20px -8px rgba(91, 33, 182, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+}
+
+.macos-dock-icon-wrap {
+  color: rgb(71 85 105);
+}
+
+.macos-dock-icon-wrap--active {
+  color: rgb(109 40 217);
+}
+
+.group:hover .macos-dock-icon-wrap:not(.macos-dock-icon-wrap--divider) {
+  color: rgb(91 33 182);
+}
+
+.macos-dock-tooltip {
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.82);
+  color: rgb(15 23 42);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px -8px rgba(15, 23, 42, 0.2);
+}
+
+.macos-dock-active-dot {
+  background: rgb(124 58 237);
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.65);
+}
