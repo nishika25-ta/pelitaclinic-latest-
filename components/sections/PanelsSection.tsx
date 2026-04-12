@@ -70,14 +70,14 @@ function MobilePanelTile({ panel }: { panel: string }) {
   return (
     <motion.div
       variants={cardPop}
-      className="group flex items-center gap-3 overflow-hidden rounded-2xl border border-violet-200/80 bg-gradient-to-br from-white via-violet-50/30 to-white p-3 shadow-[0_4px_20px_-6px_rgba(91,33,182,0.1)] ring-1 ring-violet-100/50 transition-all duration-200 active:scale-[0.97]"
+      className="group flex flex-col items-center overflow-hidden rounded-2xl border border-violet-200/80 bg-gradient-to-br from-white via-violet-50/30 to-white p-3 shadow-[0_4px_20px_-6px_rgba(91,33,182,0.1)] ring-1 ring-violet-100/50 transition-all duration-200 active:scale-[0.97]"
     >
-      <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-violet-200/60 bg-white shadow-sm">
+      <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border border-violet-200/60 bg-white shadow-sm">
         {PANEL_ICON_MAP[panel] ? (
           <img
             src={PANEL_ICON_MAP[panel]}
             alt={`${panel} logo`}
-            className="h-full w-full object-contain p-1.5"
+            className="h-full w-full object-contain p-2"
             loading="lazy"
             decoding="async"
           />
@@ -87,7 +87,7 @@ function MobilePanelTile({ panel }: { panel: string }) {
           </span>
         )}
       </div>
-      <p className="min-w-0 flex-1 text-[13px] font-semibold leading-tight text-slate-800">{panel}</p>
+      <p className="mt-2 w-full text-center text-[12px] font-semibold leading-tight text-slate-800">{panel}</p>
     </motion.div>
   );
 }
