@@ -1,22 +1,6 @@
+/* Scroller: layout + touch; motion/smooth scroll mostly from ScrollStack inline + Lenis. */
 .scroll-stack-scroller {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: visible;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  /* `smooth` fights native nested scroll + Lenis; keep stacking in sync with scrollTop. */
-  scroll-behavior: auto;
   touch-action: pan-y;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  will-change: scroll-position;
-}
-
-.scroll-stack-inner {
-  padding: 20vh 5rem 50rem;
-  min-height: 100vh;
 }
 
 .scroll-stack-card-wrapper {
@@ -26,15 +10,6 @@
 .scroll-stack-card {
   transform-origin: top center;
   will-change: transform, filter;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-  height: 20rem;
-  width: 100%;
-  margin: 30px 0;
-  padding: 3rem;
-  border-radius: 40px;
-  box-sizing: border-box;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   position: relative;
@@ -64,14 +39,9 @@
 }
 
 @media (max-width: 767px) {
-  .scroll-stack-inner {
-    padding: 12vh 1rem 36rem;
-    min-height: 100%;
-  }
-
-  .scroll-stack-card {
-    margin: 22px 0;
-    padding: 2rem;
-    border-radius: 32px;
+  .scroll-stack-card.scroll-stack-card--panel,
+  .scroll-stack-card.scroll-stack-card--service {
+    margin-top: 18px;
+    margin-bottom: 18px;
   }
 }
