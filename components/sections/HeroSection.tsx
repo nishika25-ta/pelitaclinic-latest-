@@ -30,8 +30,8 @@ const fadeUp = {
   },
 };
 
-/** Served from `public/hero.mp4` → `/hero.mp4`. Single instance — only visible on the first slide. */
-const HERO_VIDEO_SRC = "/hero.mp4";
+/** Reception photo — `public/image/herro.jpg` → `/image/herro.jpg`. Shown only on the first slide. */
+const HERO_MAIN_IMAGE_SRC = "/image/herro.jpg";
 
 /** Hero slide strip — horizontal pan; `translate3d` keeps it on the GPU (smoother on mobile). */
 const HERO_CAROUSEL_MS = 840;
@@ -70,7 +70,6 @@ function HighlightIconBadge({ id }: { id: HeroHighlightId }) {
 export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
   const { t, getHeroHighlight } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.08 });
   const reduceMotion = useReducedMotion();
   const heroReady = splashReveal === undefined ? isInView : splashReveal;
@@ -132,16 +131,6 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
     },
     [slideCount],
   );
-
-  useEffect(() => {
-    const el = heroVideoRef.current;
-    if (!el || !heroReady) return;
-    if (activeIndex === 0) {
-      void el.play().catch(() => {});
-    } else {
-      el.pause();
-    }
-  }, [heroReady, activeIndex]);
 
   /** Autoplay: 10s on the main slide, 5s on posters and highlights. Reschedules when the slide changes.
    *  Pauses while the user is dragging on desktop. Same behavior on mobile and desktop. */
@@ -261,7 +250,7 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
     [clampedDragForClientX, isDesktop, reduceMotion],
   );
 
-  const showVideo = activeIndex === 0;
+  const showMainBackdrop = activeIndex === 0;
   const carouselTransition =
     reduceMotion || isDragging ? "none" : `transform ${HERO_CAROUSEL_MS}ms ${HERO_CAROUSEL_EASE}`;
 
@@ -283,12 +272,12 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
       className="hero-section relative isolate flex min-h-[100dvh] min-h-[100svh] flex-col overflow-hidden text-white [font-family:var(--font-apple)] antialiased"
       style={{ WebkitFontSmoothing: "antialiased" }}
     >
-      {/* Single hero video + overlay — only the first slide reveals it (no duplicate video). */}
+      {/* Main slide backdrop photo + overlay — hidden when carousel leaves the first slide. */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
         <motion.div
           className="hero-parallax-layer absolute inset-[0_-5%] top-[-8%] h-[116%] w-[110%] max-w-none"
           style={
-            reduceMotion || !showVideo
+            reduceMotion || !showMainBackdrop
               ? undefined
               : {
                   y: yHero,
@@ -296,26 +285,19 @@ export default function HeroSection({ yHero, splashReveal }: HeroSectionProps) {
           }
         >
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <video
-              ref={heroVideoRef}
+            <img
+              src={HERO_MAIN_IMAGE_SRC}
+              alt=""
               draggable={false}
-              className="hero-bg-video absolute inset-0 z-0 h-full w-full object-cover object-center transition-opacity duration-500"
-              style={{ opacity: showVideo ? 1 : 0 }}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="/poster1.jpeg"
-              disablePictureInPicture
-              aria-hidden
-            >
-              <source src={HERO_VIDEO_SRC} type="video/mp4" />
-            </video>
+              fetchPriority="high"
+              decoding="async"
+              className="hero-bg-photo absolute inset-0 z-0 h-full w-full object-cover object-center transition-opacity duration-500"
+              style={{ opacity: showMainBackdrop ? 1 : 0 }}
+            />
           </div>
           <div
             className="absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/45 to-black/60 transition-opacity duration-500"
-            style={{ opacity: showVideo ? 1 : 0 }}
+            style={{ opacity: showMainBackdrop ? 1 : 0 }}
           />
         </motion.div>
       </div>

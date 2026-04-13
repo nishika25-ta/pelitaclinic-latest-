@@ -8,8 +8,8 @@
   will-change: transform;
 }
 
-/* Full-bleed hero video — crisp cover without blur; slight scale hides sub-pixel edges on parallax. */
-.hero-bg-video {
+/* Full-bleed hero backdrop — crisp cover; slight scale hides sub-pixel edges on parallax. */
+.hero-bg-photo {
   transform: scale(1.04);
   transform-origin: center center;
 }
