@@ -1,16 +1,19 @@
-/* HeroSection — parallax layer only (minimal hero). */
+/* HeroSection — layered parallax + carousel. */
 
 .hero-section {
   --hero-brand: #7c3aed;
+}
+
+.hero-parallax-root {
+  transform-style: preserve-3d;
 }
 
 .hero-parallax-layer {
   will-change: transform;
 }
 
-/* Full-bleed hero backdrop — crisp cover; slight scale hides sub-pixel edges on parallax. */
+/* Full-bleed hero photo — base scale comes from motion (scroll-linked); origin for zoom. */
 .hero-bg-photo {
-  transform: scale(1.04);
   transform-origin: center center;
 }
 

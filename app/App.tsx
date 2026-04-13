@@ -21,9 +21,7 @@ const ZERO: MotionValue<string> = { get: () => "0%", set: () => {}, on: () => ()
 
 export default function App() {
   const { scrollYProgress } = useScroll();
-  const yHeroDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const yTestimonialDesktop = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
-  const yHero = IS_MOBILE ? ZERO : yHeroDesktop;
   const yTestimonial = IS_MOBILE ? ZERO : yTestimonialDesktop;
   const [splashHandoff, setSplashHandoff] = useState(false);
   const [splashFinished, setSplashFinished] = useState(false);
@@ -47,7 +45,7 @@ export default function App() {
       <SmoothScroll>
         <div className="min-h-screen overflow-x-clip overflow-y-visible font-sans text-slate-800 selection:bg-purple-200 selection:text-purple-900">
           <main>
-            <HeroSection yHero={yHero} splashReveal={splashHandoff} />
+            <HeroSection splashReveal={splashHandoff} />
             <ScrollReveal viewport={{ once: true, amount: 0.03, margin: "0px 0px 24% 0px" }}>
               <ServicesSection />
             </ScrollReveal>
