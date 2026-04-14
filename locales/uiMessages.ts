@@ -40,8 +40,7 @@ const en: Messages = {
     carouselSelectedSuffix: " — currently shown",
   },
   services: {
-    titleLine1: "Comprehensive",
-    titleLine2: "Services Available",
+    title: "Comprehensive Services Available",
     desc: "From everyday consultation to chronic care and women's or children's health, every service is grouped clearly so patients can find what they need fast.",
     categoriesLabel: "Categories",
     totalServicesLabel: "Total Services",
@@ -62,7 +61,7 @@ const en: Messages = {
     photoPanelAria: "Doctor profile photo",
   },
   testimonials: {
-    title: "Real Patient Testimonials",
+    title: "Patient Testimonials",
     subtitle: "Collected from Google, Facebook, and Erufu Care based on the client research sheet.",
     googleReviews: "Google Reviews",
     avgRating: "5.0 Average Rating",
@@ -186,8 +185,7 @@ const ms: Messages = {
     carouselSelectedSuffix: " — dipaparkan sekarang",
   },
   services: {
-    titleLine1: "Perkhidmatan Menyeluruh",
-    titleLine2: "Yang Tersedia",
+    title: "Perkhidmatan Menyeluruh Yang Tersedia",
     desc: "Daripada konsultasi harian hingga penjagaan kronik serta kesihatan wanita atau kanak-kanak, setiap perkhidmatan dikumpulkan dengan jelas supaya pesakit cepat menemui apa yang mereka perlukan.",
     categoriesLabel: "Kategori",
     totalServicesLabel: "Jumlah Perkhidmatan",
@@ -332,8 +330,7 @@ const zh: Messages = {
     carouselSelectedSuffix: " — 当前显示",
   },
   services: {
-    titleLine1: "全面",
-    titleLine2: "医疗服务",
+    title: "全面医疗服务",
     desc: "从日常门诊到慢病管理以及妇女或儿童健康，每项服务都分组呈现，方便患者快速查找。",
     categoriesLabel: "类别",
     totalServicesLabel: "服务项目总数",

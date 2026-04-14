@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, Megaphone, Newspaper, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "../../contexts/I18nContext";
@@ -29,8 +29,10 @@ const fadeUp = {
   },
 };
 
-/** Reception photo — `public/image/herro.jpg` → `/image/herro.jpg`. Shown only on the first slide. */
+/** Reception photo — `public/image/herro.jpg` → `/image/herro.jpg`. Shown only on the first slide (tablet/desktop). */
 const HERO_MAIN_IMAGE_SRC = "/image/herro.jpg";
+/** Narrow screens — `public/mob_hero.jpg` → `/mob_hero.jpg`. */
+const HERO_MAIN_IMAGE_SRC_MOBILE = "/mob_hero.jpg";
 
 /** Hero slide strip — horizontal pan; `translate3d` keeps it on the GPU (smoother on mobile). */
 const HERO_CAROUSEL_MS = 840;
@@ -72,17 +74,6 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const isInView = useInView(sectionRef, { once: true, amount: 0.08 });
   const reduceMotion = useReducedMotion();
   const heroReady = splashReveal === undefined ? isInView : splashReveal;
-
-  /** Scroll progress while the hero crosses the viewport — drives layered parallax (mobile + desktop). */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const yDepthFar = useTransform(scrollYProgress, [0, 1], ["0%", "-34%"]);
-  const yPhoto = useTransform(scrollYProgress, [0, 1], ["0%", "-18%"]);
-  const yOverlay = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
-  const scalePhoto = useTransform(scrollYProgress, [0, 1], [1.04, 1.11]);
-  const yForeground = useTransform(scrollYProgress, [0, 1], ["0%", "11%"]);
 
   const slides = useMemo<HeroSlide[]>(
     () => [
@@ -289,28 +280,33 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
             className="hero-parallax-layer pointer-events-none absolute inset-[-8%] z-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_108%,rgba(124,58,237,0.42),transparent_58%)] transition-opacity duration-500"
             style={{
               opacity: showMainBackdrop ? 0.85 : 0,
-              ...(reduceMotion || !showMainBackdrop ? {} : { y: yDepthFar }),
             }}
           />
           <div className="absolute inset-0 z-[1] overflow-hidden">
-            <motion.img
-              src={HERO_MAIN_IMAGE_SRC}
-              alt=""
-              draggable={false}
-              fetchPriority="high"
-              decoding="async"
-              className="hero-bg-photo hero-parallax-layer absolute inset-0 z-0 h-full w-full object-cover object-center transition-opacity duration-500"
+            <motion.div
+              className="hero-bg-photo hero-parallax-layer absolute inset-0 z-0 h-full w-full transition-opacity duration-500"
               style={{
                 opacity: showMainBackdrop ? 1 : 0,
-                ...(reduceMotion ? { scale: 1.04 } : { y: yPhoto, scale: scalePhoto }),
+                scale: 1.04,
               }}
-            />
+            >
+              <picture className="absolute inset-0 block h-full w-full">
+                <source media="(max-width: 767px)" srcSet={HERO_MAIN_IMAGE_SRC_MOBILE} />
+                <img
+                  src={HERO_MAIN_IMAGE_SRC}
+                  alt=""
+                  draggable={false}
+                  fetchPriority="high"
+                  decoding="async"
+                  className="h-full w-full object-cover object-center"
+                />
+              </picture>
+            </motion.div>
           </div>
           <motion.div
             className="hero-parallax-layer absolute inset-0 z-[2] bg-gradient-to-b from-black/50 via-black/42 to-black/62 transition-opacity duration-500"
             style={{
               opacity: showMainBackdrop ? 1 : 0,
-              ...(reduceMotion || !showMainBackdrop ? {} : { y: yOverlay }),
             }}
           />
           <div
@@ -322,7 +318,6 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
 
       <motion.div
         className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden will-change-transform"
-        style={reduceMotion ? undefined : { y: yForeground }}
       >
         <div
           ref={viewportRef}
@@ -480,7 +475,9 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
         </div>
       </motion.div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-center pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-30 flex justify-center pb-[max(1rem,env(safe-area-inset-bottom))]"
+      >
         <motion.a
           href="#services"
           data-hero-no-drag
@@ -498,7 +495,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
             <ChevronDown className="h-5 w-5" aria-hidden />
           </motion.span>
         </motion.a>
-      </div>
+      </motion.div>
     </section>
   );
 }

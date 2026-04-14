@@ -96,7 +96,7 @@ export const SERVICES: ServiceItem[] = [
       "Toilet & Suturing",
       "Ear/Eye Irrigation",
       "Wound Dressing",
-      "NG Tube Insertion",
+      "NG Tube Insertion", 
       "Catheterisation",
     ],
   },

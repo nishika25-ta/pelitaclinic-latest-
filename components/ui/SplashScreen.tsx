@@ -1,36 +1,33 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
 import { CLINIC_INFO } from "../../config/clinicData";
-import { AnimatedText } from "@/components/ui/animated-text";
+import BlurText from "@/components/ui/BlurText";
 
 /** Vite serves `public/logo/logo.png` as `/logo/logo.png`. */
 const LOGO_SRC = "/logo/logo.png";
+/** Storefront photo — `public/preload.jpeg` */
+const SPLASH_BG_SRC = "/preload.jpeg";
 
 export type SplashScreenProps = {
   onExitStart?: () => void;
   onExitComplete?: () => void;
 };
 
-/** Match reference: stagger timing so the full string + underline can finish before dismiss. */
-function computeSplashHoldMs(text: string, duration: number, delay: number, reduceMotion: boolean | null): number {
-  /* Short intro + ~1s on screen + room for exit animation */
-  if (reduceMotion) return 2200;
-  const n = Array.from(text).length;
-  const delayChildren = delay;
-  const staggerSpan = Math.max(0, n - 1) * duration;
-  const letterMotionBuffer = 0.55;
-  const underlineDelay = n * delay;
-  const underlineDuration = 0.8;
-  /** Hold splash fully visible this long after letters + underline finish (seconds). */
+/** BlurText timing — must match `BlurText` props on the splash (`delay` ms, `stepDuration`, default 2-step `animationTo`). */
+const SPLASH_BLUR_DELAY_MS = 160;
+const SPLASH_BLUR_STEP_DURATION = 0.28;
+
+/** Hold until last word’s blur animation finishes + dwell + exit buffer (same whenever BlurText runs). */
+function computeSplashHoldMs(text: string): number {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  const n = Math.max(1, words.length);
+  const stepCount = 3;
+  const totalDuration = SPLASH_BLUR_STEP_DURATION * (stepCount - 1);
+  const lastWordEndSec = ((n - 1) * SPLASH_BLUR_DELAY_MS) / 1000 + totalDuration;
   const dwellAfterTextDone = 1;
-  const seconds =
-    delayChildren +
-    staggerSpan +
-    letterMotionBuffer +
-    underlineDelay +
-    underlineDuration +
-    dwellAfterTextDone;
-  return Math.ceil(Math.min(12_000, Math.max(3_800, seconds * 1000)));
+  const exitBuffer = 0.5;
+  const ms = (lastWordEndSec + dwellAfterTextDone + exitBuffer) * 1000;
+  return Math.ceil(Math.min(12_000, Math.max(3_200, ms)));
 }
 
 export default function SplashScreen({ onExitStart, onExitComplete }: SplashScreenProps = {}) {
@@ -43,12 +40,7 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
 
   const splashText = CLINIC_INFO.name;
 
-  const staggerDuration = 0.08;
-  const staggerDelay = 0.12;
-  const holdMs = useMemo(
-    () => computeSplashHoldMs(splashText, staggerDuration, staggerDelay, reduceMotion ?? false),
-    [splashText, reduceMotion],
-  );
+  const holdMs = useMemo(() => computeSplashHoldMs(splashText), [splashText]);
 
   useEffect(() => {
     const t = window.setTimeout(() => {
@@ -59,14 +51,14 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
   }, [holdMs]);
 
   const logoTransition = reduceMotion
-    ? { duration: 0.35 }
-    : { duration: 1, type: "spring" as const, bounce: 0.4 };
+    ? { duration: 0.28, ease: "easeOut" as const }
+    : { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
     <AnimatePresence onExitComplete={() => onExitCompleteRef.current?.()}>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#F5F5F7] antialiased [font-family:var(--font-apple)]"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#F5F5F7] antialiased [font-family:var(--font-apple)] [contain:layout_paint] isolate"
           style={{ WebkitFontSmoothing: "antialiased" }}
           role="status"
           aria-live="polite"
@@ -78,29 +70,23 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
             transition: { duration: 0.85, ease: [0.42, 0, 1, 1] },
           }}
         >
-          <motion.div
-            className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#0066CC]/15 blur-[100px] max-md:h-48 max-md:w-48 max-md:blur-[60px]"
-            aria-hidden
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: reduceMotion ? 0 : 0.5 }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-[#FF7A00]/10 blur-[100px] max-md:h-48 max-md:w-48 max-md:blur-[60px]"
-            aria-hidden
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: reduceMotion ? 0 : 0.5 }}
-          />
+          <div className="pointer-events-none absolute inset-0 overflow-hidden [contain:strict]" aria-hidden>
+            <img
+              src={SPLASH_BG_SRC}
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[#F5F5F7]/55" />
+          </div>
 
           {/* Centered row: logo + title */}
           <div className="relative z-10 flex w-full max-w-[100vw] items-center justify-center px-4 sm:px-6">
             <div className="flex min-w-0 max-w-full flex-wrap items-center justify-center gap-5 sm:gap-8 md:gap-10">
               <motion.div
-                initial={
-                  reduceMotion ? { opacity: 0, scale: 0.96 } : { scale: 0, rotate: -180 }
-                }
-                animate={reduceMotion ? { opacity: 1, scale: 1 } : { scale: 1, rotate: 0 }}
+                initial={reduceMotion ? { opacity: 0, scale: 0.96 } : { opacity: 0, scale: 0.88, rotate: -12 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 transition={logoTransition}
                 className="flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center rounded-3xl border border-gray-200/90 bg-white shadow-[0_20px_40px_-10px_rgba(0,102,204,0.18)] sm:h-20 sm:w-20"
               >
@@ -112,17 +98,18 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
                 />
               </motion.div>
 
-              <AnimatedText
-                text={splashText}
-                textClassName="text-center text-4xl font-bold tracking-[-0.04em] text-[#1D1D1F] sm:text-5xl md:text-6xl lg:text-7xl"
-                duration={staggerDuration}
-                delay={staggerDelay}
-                underlineGradient="from-[#0066CC] via-[#00A8E8] to-[#FF7A00]"
-                underlineHeight="h-1.5"
-                underlineOffset="-bottom-2.5"
-                replay
-                className="min-w-0 items-center justify-center"
-              />
+              {/* Title: always BlurText; MotionConfig overrides OS reduced-motion so desktop matches mobile (logo/exit still respect `reduceMotion`). */}
+              <MotionConfig reducedMotion="never">
+                <BlurText
+                  text={splashText}
+                  effect="lift"
+                  delay={SPLASH_BLUR_DELAY_MS}
+                  animateBy="words"
+                  direction="top"
+                  stepDuration={SPLASH_BLUR_STEP_DURATION}
+                  className="min-w-0 text-center text-4xl font-bold tracking-[-0.04em] text-[#1D1D1F] sm:text-5xl md:text-6xl lg:text-7xl"
+                />
+              </MotionConfig>
             </div>
           </div>
         </motion.div>

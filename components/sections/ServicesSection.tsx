@@ -169,9 +169,8 @@ export default function ServicesSection() {
             <div className="rounded-[2.5rem] border-2 border-indigo-200/85 bg-white/70 p-8 shadow-md shadow-slate-300/20 ring-1 ring-indigo-100/70 md:backdrop-blur-xl md:p-12">
             <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
               <div className="max-w-2xl">
-                <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
-                  {t("services.titleLine1")} <br className="hidden md:block" />
-                  {t("services.titleLine2")}
+                <h2 className="mb-6 text-balance text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+                  {t("services.title")}
                 </h2>
                 <p className="text-lg leading-relaxed text-slate-600">{t("services.desc")}</p>
               </div>
