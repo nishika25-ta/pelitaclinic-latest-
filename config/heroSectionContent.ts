@@ -65,4 +65,14 @@ export const HERO_POSTERS: readonly HeroPosterSlide[] = [
     srcMobile: "/Berikel_P.jpeg",
     alt: "",
   },
+  {
+    id: "poster-reception",
+    src: "/image/herro.jpg",
+    alt: "",
+  },
+  {
+    id: "poster-waiting-area",
+    src: "/image/footer.jpg",
+    alt: "",
+  },
 ] as const;

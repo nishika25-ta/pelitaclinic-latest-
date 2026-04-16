@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ChevronDown, ChevronLeft, ChevronRight, Megaphone, Newspaper, UserPlus } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "../../contexts/I18nContext";
 import { CLINIC_INFO } from "../../config/clinicData";
-import { HERO_HIGHLIGHTS, HERO_POSTERS, type HeroHighlightId } from "../../config/heroSectionContent";
+import { HERO_POSTERS } from "../../config/heroSectionContent";
 import "./HeroSection.css";
 
 interface HeroSectionProps {
@@ -30,46 +30,26 @@ const fadeUp = {
 };
 
 /** Reception photo — `public/image/herro.jpg` → `/image/herro.jpg`. Shown only on the first slide (tablet/desktop). */
-const HERO_MAIN_IMAGE_SRC = "/image/herro.jpg";
-/** Narrow screens — `public/mob_hero.jpg` → `/mob_hero.jpg`. */
-const HERO_MAIN_IMAGE_SRC_MOBILE = "/mob_hero.jpg";
+const HERO_MAIN_IMAGE_SRC = "/image/new_hero.jpg";
+/** Narrow screens — `public/image/mob_preload.jpg` → `/image/mob_preload.jpg`. */
+const HERO_MAIN_IMAGE_SRC_MOBILE = "/image/mob_preload.jpg";
 
 /** Hero slide strip — horizontal pan; `translate3d` keeps it on the GPU (smoother on mobile). */
-const HERO_CAROUSEL_MS = 840;
-const HERO_CAROUSEL_EASE = "cubic-bezier(0.33, 1, 0.68, 1)";
+const HERO_CAROUSEL_MS_MOBILE = 840;
+const HERO_CAROUSEL_MS_DESKTOP = 980;
+const HERO_CAROUSEL_EASE_MANUAL = "cubic-bezier(0.33, 1, 0.68, 1)";
+const HERO_CAROUSEL_EASE_AUTO_DESKTOP = "cubic-bezier(0.22, 0.95, 0.28, 1)";
 
 /** Autoplay: longer on the opening main slide, standard cadence on posters and highlights. */
 const HERO_AUTOPLAY_MAIN_MS = 10_000;
 const HERO_AUTOPLAY_OTHER_MS = 5000;
 
-const HIGHLIGHT_ICONS: Record<HeroHighlightId, typeof Megaphone> = {
-  promotions: Megaphone,
-  news: Newspaper,
-  hiring: UserPlus,
-};
-
-const HIGHLIGHT_BG: Record<HeroHighlightId, string> = {
-  promotions: "bg-gradient-to-br from-violet-950 via-purple-950 to-black",
-  news: "bg-gradient-to-br from-slate-900 via-violet-950/95 to-black",
-  hiring: "bg-gradient-to-br from-teal-950/90 via-slate-950 to-black",
-};
-
 type HeroSlide =
   | { kind: "main" }
-  | { kind: "poster"; posterId: string; src: string; srcMobile?: string; alt: string }
-  | { kind: "highlight"; id: HeroHighlightId; category: string; title: string; description: string };
-
-function HighlightIconBadge({ id }: { id: HeroHighlightId }) {
-  const Icon = HIGHLIGHT_ICONS[id];
-  return (
-    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-white shadow-lg md:backdrop-blur-md">
-      <Icon className="h-7 w-7" strokeWidth={1.5} aria-hidden />
-    </div>
-  );
-}
+  | { kind: "poster"; posterId: string; src: string; srcMobile?: string; alt: string };
 
 export default function HeroSection({ splashReveal }: HeroSectionProps) {
-  const { t, getHeroHighlight } = useI18n();
+  const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.08 });
   const reduceMotion = useReducedMotion();
@@ -85,9 +65,8 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
         srcMobile: p.srcMobile,
         alt: t(`hero.posters.${p.id}.alt`),
       })),
-      ...HERO_HIGHLIGHTS.map((h) => ({ kind: "highlight" as const, ...getHeroHighlight(h.id) })),
     ],
-    [t, getHeroHighlight],
+    [t],
   );
   const slideCount = slides.length;
   const slideCountRef = useRef(slideCount);
@@ -96,6 +75,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [dragPx, setDragPx] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const autoAdvanceTimerRef = useRef<number | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(0);
@@ -103,6 +83,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const dragStartClientXRef = useRef(0);
   const velocityRef = useRef({ x: 0, t: 0 });
   const dragAbortRef = useRef<AbortController | null>(null);
+  const transitionModeRef = useRef<"manual" | "auto">("manual");
 
   activeIndexRef.current = activeIndex;
 
@@ -114,15 +95,24 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
     [],
   );
 
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () => setIsDesktop(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   const go = useCallback(
     (delta: number) => {
+      transitionModeRef.current = "manual";
       setDragPx(0);
       setActiveIndex((i) => (i + delta + slideCount) % slideCount);
     },
     [slideCount],
   );
 
-  /** Autoplay: 10s on the main slide, 5s on posters and highlights. Reschedules when the slide changes.
+  /** Autoplay: 10s on the main slide, 5s on posters. Reschedules when the slide changes.
    *  Pauses while the user is dragging. Same behavior on mobile and desktop. */
   useEffect(() => {
     if (!heroReady || isDragging) {
@@ -139,6 +129,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
     const holdMs = activeIndex === 0 ? HERO_AUTOPLAY_MAIN_MS : HERO_AUTOPLAY_OTHER_MS;
     autoAdvanceTimerRef.current = window.setTimeout(() => {
       autoAdvanceTimerRef.current = null;
+      transitionModeRef.current = "auto";
       setActiveIndex((i) => (i + 1) % slideCountRef.current);
     }, holdMs);
     return () => {
@@ -230,6 +221,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
 
         setDragPx(0);
         if (d !== 0) {
+          transitionModeRef.current = "manual";
           setActiveIndex((i) => (i + d + slideCountRef.current) % slideCountRef.current);
         }
       };
@@ -242,15 +234,16 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   );
 
   const showMainBackdrop = activeIndex === 0;
-  const carouselTransition =
-    reduceMotion || isDragging ? "none" : `transform ${HERO_CAROUSEL_MS}ms ${HERO_CAROUSEL_EASE}`;
+  const carouselDurationMs = isDesktop ? HERO_CAROUSEL_MS_DESKTOP : HERO_CAROUSEL_MS_MOBILE;
+  const carouselEase =
+    isDesktop && transitionModeRef.current === "auto" ? HERO_CAROUSEL_EASE_AUTO_DESKTOP : HERO_CAROUSEL_EASE_MANUAL;
+  const carouselTransition = reduceMotion || isDragging ? "none" : `transform ${carouselDurationMs}ms ${carouselEase}`;
 
   const liveCaption = useMemo(() => {
     const s = slides[activeIndex];
     if (!s) return "";
     if (s.kind === "main") return t("hero.liveMain");
-    if (s.kind === "poster") return s.alt;
-    return `${s.category}. ${s.title}`;
+    return s.alt;
   }, [slides, activeIndex, t]);
 
   return (
@@ -336,9 +329,9 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
               backfaceVisibility: "hidden",
             }}
           >
-            {slides.map((slide) => (
+            {slides.map((slide, slideIndex) => (
               <div
-                key={slide.kind === "main" ? "main" : slide.kind === "poster" ? slide.posterId : slide.id}
+                key={slide.kind === "main" ? "main" : slide.posterId}
                 className={cn(
                   "relative min-h-[100dvh] min-h-[100svh] shrink-0 overflow-hidden",
                   slide.kind === "poster"
@@ -349,10 +342,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
               >
                 {slide.kind === "poster" ? (
                   <>
-                    <div
-                      className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-neutral-950 via-neutral-900 to-black md:hidden"
-                      aria-hidden
-                    />
+                    <div className="pointer-events-none absolute inset-0 z-0 bg-transparent md:hidden" aria-hidden />
                     <div
                       className={cn(
                         "relative z-[1] flex min-h-[100dvh] min-h-[100svh] w-full items-center justify-center px-4 pb-24 pt-[calc(4.5rem+env(safe-area-inset-top,0px))] sm:px-6 sm:pb-28 sm:pt-[calc(5rem+env(safe-area-inset-top,0px))]",
@@ -372,8 +362,9 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                               src={slide.src}
                               alt={slide.alt}
                               draggable={false}
-                              className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-black/30 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:h-full md:min-h-full md:w-full md:rounded-none md:border-0 md:ring-0 md:shadow-none"
-                              loading={slide.posterId === "poster-prep" ? "eager" : "lazy"}
+                              className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-transparent shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:h-full md:min-h-full md:w-full md:rounded-none md:border-0 md:ring-0 md:shadow-none"
+                              loading={slideIndex <= 2 ? "eager" : "lazy"}
+                              fetchPriority={slideIndex <= 2 ? "high" : "auto"}
                               decoding="async"
                               sizes="(max-width: 767px) 100vw, 100vw"
                             />
@@ -383,8 +374,9 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                             src={slide.src}
                             alt={slide.alt}
                             draggable={false}
-                            className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-black/30 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:absolute md:inset-0 md:h-full md:min-h-full md:w-full md:rounded-none md:border-0 md:ring-0 md:shadow-none"
-                            loading={slide.posterId === "poster-prep" ? "eager" : "lazy"}
+                            className="hero-poster-img block w-full rounded-2xl border border-white/15 bg-transparent shadow-[0_24px_80px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/10 sm:rounded-3xl md:absolute md:inset-0 md:h-full md:min-h-full md:w-full md:rounded-none md:border-0 md:ring-0 md:shadow-none"
+                            loading={slideIndex <= 2 ? "eager" : "lazy"}
+                            fetchPriority={slideIndex <= 2 ? "high" : "auto"}
                             decoding="async"
                             sizes="(max-width: 767px) 100vw, 100vw"
                           />
@@ -393,50 +385,29 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                     </div>
                   </>
                 ) : (
-                  <>
-                    {slide.kind === "highlight" && (
-                      <div
-                        className={`pointer-events-none absolute inset-0 z-0 ${HIGHLIGHT_BG[slide.id]}`}
-                        aria-hidden
-                      />
-                    )}
-                    <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-                      {slide.kind === "main" ? (
-                        <motion.div
-                          variants={blockReveal}
-                          initial="hidden"
-                          animate={heroReady && activeIndex === 0 ? "visible" : "hidden"}
-                          className="flex flex-col items-center"
-                        >
-                          <motion.h1
-                            variants={fadeUp}
-                            className="text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl"
-                          >
-                            <span className="block text-white">{t("hero.mainLine1")}</span>
-                            <span className="mt-1 block text-[#D4C5A0] sm:mt-2">{t("hero.mainLine2")}</span>
-                          </motion.h1>
+                  <div className="relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+                    <motion.div
+                      variants={blockReveal}
+                      initial="hidden"
+                      animate={heroReady && activeIndex === 0 ? "visible" : "hidden"}
+                      className="flex flex-col items-center"
+                    >
+                      <motion.h1
+                        variants={fadeUp}
+                        className="text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl"
+                      >
+                        <span className="block text-white">{t("hero.mainLine1")}</span>
+                        <span className="mt-1 block text-[#D4C5A0] sm:mt-2">{t("hero.mainLine2")}</span>
+                      </motion.h1>
 
-                          <motion.p
-                            variants={fadeUp}
-                            className="mt-8 max-w-2xl text-pretty text-base font-normal leading-relaxed text-white/90 sm:mt-10 sm:text-lg"
-                          >
-                            {t("hero.intro", { name: CLINIC_INFO.name })}
-                          </motion.p>
-                        </motion.div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <HighlightIconBadge id={slide.id} />
-                          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">{slide.category}</p>
-                          <h2 className="text-balance text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl">
-                            {slide.title}
-                          </h2>
-                          <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/85 sm:text-lg">
-                            {slide.description}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </>
+                      <motion.p
+                        variants={fadeUp}
+                        className="mt-8 max-w-2xl text-pretty text-base font-normal leading-relaxed text-white/90 sm:mt-10 sm:text-lg"
+                      >
+                        {t("hero.intro", { name: CLINIC_INFO.name })}
+                      </motion.p>
+                    </motion.div>
+                  </div>
                 )}
               </div>
             ))}

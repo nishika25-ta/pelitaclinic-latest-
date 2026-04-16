@@ -51,7 +51,7 @@ export default function TestimonialsSection({ yTestimonial }: TestimonialsSectio
           y: yTestimonial,
         }}
       />
-      <div className="container-shell relative z-10">
+      <div className="c13782461111111111ontainer-shell relative z-10">
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <h2 className="section-title mb-4">{t("testimonials.title")}</h2>
           <p className="text-slate-600">{t("testimonials.subtitle")}</p>

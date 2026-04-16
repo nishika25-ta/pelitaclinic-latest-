@@ -104,6 +104,8 @@ const en: Messages = {
     next: "Next slide",
     srLine: "Slide {{current}} of {{total}}. {{caption}}",
     liveMain: "Trusted Care, Done Right.",
+    highlightPlaceholderCaption: "{{category}}. Image placeholder.",
+    imagePlaceholderHint: "Artwork or photo will appear here when ready.",
     highlights: {
       promotions: {
         category: "Promotions",
@@ -142,6 +144,12 @@ const en: Messages = {
       },
       "poster-berikel": {
         alt: "Pelita Clinic poster: Barikel glucose drink for oral glucose tolerance testing — bottle pricing and glucose test package with consultation.",
+      },
+      "poster-reception": {
+        alt: "Pelita Clinic photo: front desk reception team at the clinic counter.",
+      },
+      "poster-waiting-area": {
+        alt: "Pelita Clinic photo: patient waiting area with seating and clinic notice board.",
       },
     },
   },
@@ -249,6 +257,8 @@ const ms: Messages = {
     next: "Slaid seterusnya",
     srLine: "Slaid {{current}} daripada {{total}}. {{caption}}",
     liveMain: "Penjagaan Dipercayai, Dilakukan Dengan Betul.",
+    highlightPlaceholderCaption: "{{category}}. Ruang imej sementara.",
+    imagePlaceholderHint: "Imej atau karya seni akan dipaparkan di sini apabila sedia.",
     highlights: {
       promotions: {
         category: "Promosi",
@@ -287,6 +297,12 @@ const ms: Messages = {
       },
       "poster-berikel": {
         alt: "Poster Pelita Clinic: minuman glukosa Barikel untuk ujian toleransi glukosa — harga botol dan pakej ujian air gula dengan konsultasi.",
+      },
+      "poster-reception": {
+        alt: "Foto Pelita Clinic: pasukan kaunter penerimaan di meja hadapan klinik.",
+      },
+      "poster-waiting-area": {
+        alt: "Foto Pelita Clinic: ruang menunggu pesakit dengan tempat duduk dan papan notis klinik.",
       },
     },
   },
@@ -394,6 +410,8 @@ const zh: Messages = {
     next: "下一张",
     srLine: "第{{current}}张，共{{total}}张。{{caption}}",
     liveMain: "值得信赖的诊疗，用心做好。",
+    highlightPlaceholderCaption: "{{category}}。图片占位。",
+    imagePlaceholderHint: "正式图片或设计就绪后将显示在此处。",
     highlights: {
       promotions: {
         category: "优惠",
@@ -429,6 +447,12 @@ const zh: Messages = {
       },
       "poster-berikel": {
         alt: "Pelita Clinic 海报：Barikel 葡萄糖饮品（口服糖耐量检查）——瓶装价格与含咨询的糖耐量检测套餐。",
+      },
+      "poster-reception": {
+        alt: "Pelita Clinic 照片：诊所前台接待团队。",
+      },
+      "poster-waiting-area": {
+        alt: "Pelita Clinic 照片：患者候诊区，含座位与诊所公告板。",
       },
     },
   },
