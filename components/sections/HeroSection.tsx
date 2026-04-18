@@ -4,7 +4,7 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "../../contexts/I18nContext";
 import { CLINIC_INFO } from "../../config/clinicData";
-import { HERO_POSTERS } from "../../config/heroSectionContent";
+import { getOrderedHeroPosters, HERO_POSTERS } from "../../config/heroSectionContent";
 import "./HeroSection.css";
 
 interface HeroSectionProps {
@@ -31,8 +31,6 @@ const fadeUp = {
 
 /** Reception photo — `public/image/herro.jpg` → `/image/herro.jpg`. Shown only on the first slide (tablet/desktop). */
 const HERO_MAIN_IMAGE_SRC = "/image/new_hero.jpg";
-/** Narrow screens — `public/image/mob_preload.jpg` → `/image/mob_preload.jpg`. */
-const HERO_MAIN_IMAGE_SRC_MOBILE = "/image/mob_preload.jpg";
 
 /** Hero slide strip — horizontal pan; `translate3d` keeps it on the GPU (smoother on mobile). */
 const HERO_CAROUSEL_MS_MOBILE = 840;
@@ -58,7 +56,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const slides = useMemo<HeroSlide[]>(
     () => [
       { kind: "main" },
-      ...HERO_POSTERS.map((p) => ({
+      ...getOrderedHeroPosters(HERO_POSTERS).map((p) => ({
         kind: "poster" as const,
         posterId: p.id,
         src: p.src,
@@ -233,7 +231,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
     [clampedDragForClientX, reduceMotion],
   );
 
-  const showMainBackdrop = activeIndex === 0;
+  const showMainBackdrop = true;
   const carouselDurationMs = isDesktop ? HERO_CAROUSEL_MS_DESKTOP : HERO_CAROUSEL_MS_MOBILE;
   const carouselEase =
     isDesktop && transitionModeRef.current === "auto" ? HERO_CAROUSEL_EASE_AUTO_DESKTOP : HERO_CAROUSEL_EASE_MANUAL;
@@ -273,17 +271,14 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                 scale: 1.04,
               }}
             >
-              <picture className="absolute inset-0 block h-full w-full">
-                <source media="(max-width: 767px)" srcSet={HERO_MAIN_IMAGE_SRC_MOBILE} />
-                <img
-                  src={HERO_MAIN_IMAGE_SRC}
-                  alt=""
-                  draggable={false}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="h-full w-full object-cover object-center"
-                />
-              </picture>
+              <img
+                src={HERO_MAIN_IMAGE_SRC}
+                alt=""
+                draggable={false}
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover object-center"
+              />
             </motion.div>
           </div>
           <motion.div

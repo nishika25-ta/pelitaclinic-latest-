@@ -35,9 +35,11 @@ export const HERO_HIGHLIGHTS: readonly HeroHighlight[] = [
   },
 ] as const;
 
-/** Hero carousel poster images — files live in `public/` (e.g. `public/poster1.jpeg` → `/poster1.jpeg`). */
+/** Hero carousel poster images — files live in `public/poster_hero/` (e.g. `public/poster_hero/Senior_L.jpeg` → `/poster_hero/Senior_L.jpeg`). */
 export interface HeroPosterSlide {
   id: string;
+  /** Sort order in carousel; lower number shows earlier. */
+  order: number;
   /** Landscape / desktop (default `<img src>` and `<picture>` fallback). */
   src: string;
   /** Portrait / narrow viewports — used with `<source media="(max-width: 767px)">` when set. */
@@ -49,30 +51,69 @@ export interface HeroPosterSlide {
 export const HERO_POSTERS: readonly HeroPosterSlide[] = [
   {
     id: "poster-senior",
-    src: "/Senior_L.jpeg",
-    srcMobile: "/Senior_P.jpeg",
+    order: 10,
+    src: "/poster_hero/Senior_L.jpeg",
+    srcMobile: "/poster_hero/Senior_P.jpeg",
     alt: "",
   },
   {
     id: "poster-vaccine",
-    src: "/Vaccine_L.jpeg",
-    srcMobile: "/Vaccine_P.jpeg",
+    order: 20,
+    src: "/poster_hero/Vaccine_L.jpeg",
+    srcMobile: "/poster_hero/Vaccine_P.jpeg",
     alt: "",
   },
   {
     id: "poster-berikel",
-    src: "/Berikel_L.jpeg",
-    srcMobile: "/Berikel_P.jpeg",
+    order: 90,
+    src: "/poster_hero/Berikel_L.jpeg",
+    srcMobile: "/poster_hero/Berikel_P.jpeg",
     alt: "",
   },
   {
-    id: "poster-reception",
-    src: "/image/herro.jpg",
+    id: "poster-hs1",
+    order: 30,
+    src: "/poster_hero/new/HS1_L.png",
+    srcMobile: "/poster_hero/new/HS1_P.png",
     alt: "",
   },
   {
-    id: "poster-waiting-area",
-    src: "/image/footer.jpg",
+    id: "poster-hs2",
+    order: 40,
+    src: "/poster_hero/new/HS2_L.png",
+    srcMobile: "/poster_hero/new/HS2_P.png",
+    alt: "",
+  },
+  {
+    id: "poster-hiv",
+    order: 50,
+    src: "/poster_hero/new/hiv_L.png",
+    srcMobile: "/poster_hero/new/hiv_P.jpeg",
+    alt: "",
+  },
+  {
+    id: "poster-preg",
+    order: 60,
+    src: "/poster_hero/new/preg_L.png",
+    srcMobile: "/poster_hero/new/preg_P.png",
+    alt: "",
+  },
+  {
+    id: "poster-labour",
+    order: 70,
+    src: "/poster_hero/new/labour_L.jpeg",
+    srcMobile: "/poster_hero/new/labour_P.jpeg",
+    alt: "",
+  },
+  {
+    id: "poster-give",
+    order: 90,
+    src: "/poster_hero/new/give_L.jpeg",
+    srcMobile: "/poster_hero/new/give_P.jpeg",
     alt: "",
   },
 ] as const;
+
+export function getOrderedHeroPosters(posters: readonly HeroPosterSlide[]): HeroPosterSlide[] {
+  return [...posters].sort((a, b) => a.order - b.order);
+}
