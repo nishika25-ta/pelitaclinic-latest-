@@ -174,12 +174,12 @@ export default function ServicesSection() {
                 </h2>
                 <p className="text-lg leading-relaxed text-slate-600">{t("services.desc")}</p>
               </div>
-              <div className="flex flex-wrap gap-4">
-                <div className="min-w-[140px] rounded-2xl border-2 border-indigo-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-200/60">
+              <div className="grid w-full grid-cols-2 gap-3 sm:gap-4 lg:flex lg:w-auto lg:flex-wrap">
+                <div className="min-w-0 rounded-2xl border-2 border-indigo-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-200/60 sm:p-6 lg:min-w-[140px]">
                   <p className="mb-1 text-xs font-bold uppercase tracking-wider text-slate-400">{t("services.categoriesLabel")}</p>
                   <p className="text-4xl font-black text-slate-800">{SERVICES.length}</p>
                 </div>
-                <div className="min-w-[140px] rounded-2xl border-2 border-indigo-200/80 bg-white p-6 shadow-sm ring-1 ring-slate-200/60">
+                <div className="min-w-0 rounded-2xl border-2 border-indigo-200/80 bg-white p-4 shadow-sm ring-1 ring-slate-200/60 sm:p-6 lg:min-w-[140px]">
                   <p className="mb-1 text-xs font-bold uppercase tracking-wider text-slate-400">{t("services.totalServicesLabel")}</p>
                   <p className="text-4xl font-black text-slate-800">{totalServices}</p>
                 </div>
