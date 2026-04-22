@@ -10,8 +10,13 @@ export default function ContactSection() {
   const { ref, y } = useParallax({ distance: 25 });
 
   return (
-    <section id="contact" className="section-shell">
-      <div className="container-shell">
+    <section id="contact" className="section-shell relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <img src="/image/hallway.jpg" alt="" className="h-full w-full scale-105 object-cover blur-[3px]" />
+        <div className="absolute inset-0 bg-white/72" />
+      </div>
+
+      <div className="container-shell relative z-10">
         <div className="mb-10 text-center">
           <h2 className="section-title mb-3">{t("contact.title")}</h2>
           <p className="mx-auto max-w-2xl text-slate-600">
@@ -97,7 +102,7 @@ export default function ContactSection() {
                 title={t("contact.mapTitle")}
               />
             </div>
-            <div className="p-6">
+            <div className="rounded-2xl bg-white/70 p-6 backdrop-blur-[2px]">
               <h4 className="mb-2 text-center text-xl font-bold text-slate-900">{t("contact.ctaTitle")}</h4>
               <p className="mb-5 text-center text-sm text-slate-600">{t("contact.ctaBody")}</p>
               <div className="flex flex-col gap-3">

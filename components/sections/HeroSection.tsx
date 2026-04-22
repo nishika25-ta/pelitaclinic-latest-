@@ -389,10 +389,12 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
                     >
                       <motion.h1
                         variants={fadeUp}
-                        className="rounded-2xl border border-white/20 bg-white/10 px-5 py-4 text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] shadow-[0_16px_40px_-24px_rgba(0,0,0,0.7)] backdrop-blur-[6px] sm:px-7 sm:py-5 sm:text-6xl md:rounded-3xl md:px-10 md:py-7 md:text-7xl lg:text-8xl"
+                        className="rounded-2xl border border-white/30 bg-[linear-gradient(135deg,rgba(255,255,255,0.28),rgba(255,255,255,0.12))] px-5 py-4 text-balance text-4xl font-black leading-[1.05] tracking-[-0.04em] shadow-[0_28px_65px_-30px_rgba(0,0,0,0.85)] ring-1 ring-white/15 backdrop-blur-[12px] sm:px-7 sm:py-5 sm:text-6xl md:rounded-3xl md:px-10 md:py-7 md:text-7xl md:backdrop-blur-[16px] lg:text-8xl"
                       >
-                        <span className="block text-white">{t("hero.mainLine1")}</span>
-                        <span className="mt-1 block text-[#8B5CF6] drop-shadow-[0_2px_10px_rgba(124,58,237,0.6)] sm:mt-2">
+                        <span className="block text-white [text-shadow:0_1px_2px_rgba(15,23,42,0.45)] md:[text-shadow:none] md:[-webkit-text-stroke:0.8px_rgba(15,23,42,0.55)]">
+                          {t("hero.mainLine1")}
+                        </span>
+                        <span className="mt-1 block text-[#8B5CF6] [text-shadow:0_1px_2px_rgba(46,16,101,0.45)] md:[text-shadow:none] md:[-webkit-text-stroke:0.8px_rgba(46,16,101,0.55)] sm:mt-2">
                           {t("hero.mainLine2")}
                         </span>
                       </motion.h1>
