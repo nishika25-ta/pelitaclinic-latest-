@@ -18,10 +18,12 @@ export default function ContactSection() {
 
       <div className="container-shell relative z-10">
         <div className="mb-10 text-center">
-          <h2 className="section-title mb-3">{t("contact.title")}</h2>
-          <p className="mx-auto max-w-2xl text-slate-600">
-            {CLINIC_INFO.appointmentPolicy} {t("contact.leadSuffix")}
-          </p>
+          <div className="md:mx-auto md:max-w-3xl md:rounded-3xl md:border md:border-white/35 md:bg-white/35 md:px-8 md:py-6 md:shadow-[0_20px_50px_-30px_rgba(15,23,42,0.45)] md:backdrop-blur-[10px]">
+            <h2 className="section-title mb-3">{t("contact.title")}</h2>
+            <p className="mx-auto max-w-2xl text-slate-600">
+              {CLINIC_INFO.appointmentPolicy} {t("contact.leadSuffix")}
+            </p>
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
