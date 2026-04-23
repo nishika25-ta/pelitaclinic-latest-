@@ -58,7 +58,7 @@ export default function TestimonialsSection({ yTestimonial }: TestimonialsSectio
           <div className="mx-auto mt-6 flex w-full max-w-2xl flex-col items-stretch gap-5 overflow-hidden rounded-3xl border border-violet-200/40 bg-gradient-to-br from-white/95 via-violet-50/35 to-fuchsia-50/20 p-5 shadow-[0_24px_60px_-24px_rgba(91,33,182,0.28)] ring-1 ring-white/70 md:backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6">
             <div className="flex shrink-0 justify-center sm:justify-start">
               <img
-                src="/Five-Star-Google-Review-Recognition-PNG.png"
+                src="/Five-Star-Google-Review-Recognition-PNG.webp"
                 alt="Google five-star review recognition banner"
                 className="h-14 w-auto object-contain drop-shadow-sm sm:h-16"
                 loading="lazy"

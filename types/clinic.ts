@@ -22,7 +22,7 @@ export interface DoctorProfile {
   qualifications: string[];
   experience: string;
   languages: string;
-  /** Public URL, e.g. `/dr_image.jpg` from `public/`. */
+  /** Public URL, e.g. `/dr_image.webp` from `public/`. */
   doctorPhotoSrc: string;
 }
 

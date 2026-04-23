@@ -11,7 +11,7 @@ export default function ProfileSection() {
   return (
     <section id="profile" className="section-shell relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
-        <div className="absolute inset-0 scale-105 bg-[url('/bg.jpg')] bg-cover bg-center blur-sm md:blur-[6px]" />
+        <div className="absolute inset-0 scale-105 bg-[url('/bg.webp')] bg-cover bg-center blur-sm md:blur-[6px]" />
         <div className="absolute inset-0 bg-white/72" />
       </div>
 
@@ -83,7 +83,7 @@ export default function ProfileSection() {
             </h4>
             <div className="mb-3 flex items-center gap-3">
               <img
-                src="/logo/logo.png"
+                src="/logo/logo.webp"
                 alt={`${CLINIC_INFO.name} logo`}
                 className="h-12 w-12 rounded-full border border-violet-200 bg-white object-cover shadow-sm"
                 loading="lazy"

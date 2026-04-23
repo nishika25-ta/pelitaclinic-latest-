@@ -12,7 +12,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="section-shell relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <img src="/image/hallway.jpg" alt="" className="h-full w-full scale-105 object-cover blur-[3px]" />
+        <img src="/image/hallway.webp" alt="" className="h-full w-full scale-105 object-cover blur-[3px]" />
         <div className="absolute inset-0 bg-white/72" />
       </div>
 

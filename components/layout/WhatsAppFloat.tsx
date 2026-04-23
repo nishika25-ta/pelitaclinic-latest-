@@ -50,7 +50,7 @@ export default function WhatsAppFloat() {
         transition={hovered ? { duration: 0.2, ease: "easeOut" } : { duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
       >
         <img
-          src="/logo/whts.png"
+          src="/logo/whts.webp"
           alt=""
           className="h-full w-full select-none object-contain transition-[filter,transform] duration-300 ease-out [filter:drop-shadow(0_6px_14px_rgba(15,23,42,0.14))_drop-shadow(0_2px_6px_rgba(22,163,74,0.22))] group-hover:[filter:drop-shadow(0_12px_28px_rgba(15,23,42,0.22))_drop-shadow(0_0_22px_rgba(34,197,94,0.45))] group-hover:scale-[1.04]"
           draggable={false}

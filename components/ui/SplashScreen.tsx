@@ -3,12 +3,12 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { CLINIC_INFO } from "../../config/clinicData";
 import SplitText from "@/components/ui/SplitText";
 
-/** Vite serves `public/logo/logo.png` as `/logo/logo.png`. */
-const LOGO_SRC = "/logo/logo.png";
-/** Storefront photo — `public/preload.jpeg` */
-const SPLASH_BG_SRC = "/preload.jpeg";
-/** Mobile preload photo — `public/image/mob_preload.jpg` */
-const SPLASH_BG_SRC_MOBILE = "/image/hallway.jpg";
+/** App logo served from `public/logo/logo.webp`. */
+const LOGO_SRC = "/logo/logo.webp";
+/** Storefront photo — `public/preload.webp` */
+const SPLASH_BG_SRC = "/preload.webp";
+/** Mobile preload photo — `public/image/hallway.webp` */
+const SPLASH_BG_SRC_MOBILE = "/image/hallway.webp";
 
 export type SplashScreenProps = {
   onExitStart?: () => void;

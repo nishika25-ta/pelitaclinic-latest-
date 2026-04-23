@@ -4,20 +4,20 @@ import { PANELS } from "../../config/clinicData";
 import { useParallax } from "../../utils/useParallax";
 
 const PANEL_ICON_MAP: Record<string, string> = {
-  AIA: "/panel_icon/AIA.png",
-  "EMAS (Eximius)": "/panel_icon/eximius.png",
-  PERKESO: "/panel_icon/PERKESO.png",
-  "Health Connect / MediExpress": "/panel_icon/mediexpress.png",
-  "PeKa B40": "/panel_icon/PEKA.png",
-  PMCare: "/panel_icon/pmcare.png",
-  "Senior Citizen Health Benefit (SCHB)": "/panel_icon/SCHB.jpg",
-  "Kenyalang Gold Card": "/panel_icon/GoldCard.png",
-  WeCare: "/panel_icon/wecare.png",
-  Medkad: "/panel_icon/medkad.png",
-  "Great Eastern": "/panel_icon/greateastern.png",
-  "Public Bank": "/panel_icon/publicbank.png",
-  "Grand Palace Hotel Miri": "/panel_icon/grandpalace.png",
-  SAFHIS: "/panel_icon/SFH.jpeg",
+  AIA: "/panel_icon/AIA.webp",
+  "EMAS (Eximius)": "/panel_icon/eximius.webp",
+  PERKESO: "/panel_icon/PERKESO.webp",
+  "Health Connect / MediExpress": "/panel_icon/mediexpress.webp",
+  "PeKa B40": "/panel_icon/PEKA.webp",
+  PMCare: "/panel_icon/pmcare.webp",
+  "Senior Citizen Health Benefit (SCHB)": "/panel_icon/SCHB.webp",
+  "Kenyalang Gold Card": "/panel_icon/GoldCard.webp",
+  WeCare: "/panel_icon/wecare.webp",
+  Medkad: "/panel_icon/medkad.webp",
+  "Great Eastern": "/panel_icon/greateastern.webp",
+  "Public Bank": "/panel_icon/publicbank.webp",
+  "Grand Palace Hotel Miri": "/panel_icon/grandpalace.webp",
+  SAFHIS: "/panel_icon/SFH.webp",
 };
 
 /** Desktop card — tall with large logo area + label bar. */

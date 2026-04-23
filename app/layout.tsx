@@ -14,8 +14,8 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Pelita Clinic",
   icons: {
-    icon: "/logo/logo.png",
-    apple: "/logo/logo.png",
+    icon: "/logo/logo.webp",
+    apple: "/logo/logo.webp",
   },
 };
 
@@ -30,8 +30,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <link rel="preload" as="image" href="/preload.jpeg" fetchPriority="high" />
-        <link rel="preload" as="image" href="/logo/logo.png" />
+        <link rel="preload" as="image" href="/preload.webp" fetchPriority="high" />
+        <link rel="preload" as="image" href="/logo/logo.webp" />
       </head>
       <body className={inter.variable}>
         <I18nProvider>{children}</I18nProvider>

@@ -32,7 +32,7 @@ export default function SiteFooter() {
     <footer className="relative overflow-hidden border-t border-white/20 bg-slate-950">
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat blur-md scale-110"
-        style={{ backgroundImage: "url('/image/footer.jpg')" }}
+        style={{ backgroundImage: "url('/image/footer.webp')" }}
         aria-hidden
       />
       <div
@@ -43,7 +43,7 @@ export default function SiteFooter() {
         <div className="flex flex-col gap-7 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
           <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:gap-3.5">
             <img
-              src="/logo/logo.png"
+              src="/logo/logo.webp"
               alt={`${CLINIC_INFO.name} logo`}
               width={36}
               height={36}

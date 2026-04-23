@@ -29,8 +29,8 @@ const fadeUp = {
   },
 };
 
-/** Reception photo — `public/image/herro.jpg` → `/image/herro.jpg`. Shown only on the first slide (tablet/desktop). */
-const HERO_MAIN_IMAGE_SRC = "/image/new_hero.jpg";
+/** Reception photo — `public/image/new_hero.webp` → `/image/new_hero.webp`. Shown only on the first slide (tablet/desktop). */
+const HERO_MAIN_IMAGE_SRC = "/image/new_hero.webp";
 
 /** Hero slide strip — horizontal pan; `translate3d` keeps it on the GPU (smoother on mobile). */
 const HERO_CAROUSEL_MS_MOBILE = 840;

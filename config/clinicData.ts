@@ -53,7 +53,7 @@ export const DOCTOR_PROFILE: DoctorProfile = {
   ],
   experience: "12+ years",
   languages: "English, Bahasa Melayu, Mandarin",
-  doctorPhotoSrc: "/dr_image.jpg",
+  doctorPhotoSrc: "/dr_image.webp",
 };
 
 export const SERVICES: ServiceItem[] = [
