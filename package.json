@@ -5,10 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lighthouse:local": "npx --yes lighthouse@12 http://localhost:3000/ --only-categories=performance,accessibility,best-practices,seo --view",
-    "lighthouse:report": "npx --yes lighthouse@12 http://localhost:3000/ --only-categories=performance,accessibility,best-practices,seo --output=html --output-path=./lighthouse-report.html",
-    "pagespeed": "node scripts/pagespeed.mjs"
+    "start": "next start"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
