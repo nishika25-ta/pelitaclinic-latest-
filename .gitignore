@@ -9,6 +9,13 @@ dist
 .DS_Store
 Thumbs.db
 
+# Lighthouse / PageSpeed / local audit outputs
+lighthouse-out.*
+lighthouse-report.html
+lighthouse-*.json
+localhost_*.report.html
+pagespeed-report.json
+
 # Playwright
 /test-results/
 /playwright-report/

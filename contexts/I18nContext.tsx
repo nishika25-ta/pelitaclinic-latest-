@@ -27,6 +27,13 @@ function readStoredLocale(): Locale {
   return "en";
 }
 
+/**
+ * Server render and the client's first pass must use the same locale, or
+ * `localStorage` would diverge from SSR and cause a hydration error.
+ * We always start as `"en"` (matches RSC) and re-sync from storage after mount.
+ */
+const defaultLocale: Locale = "en";
+
 type I18nContextValue = {
   locale: Locale;
   locales: typeof LOCALES;
@@ -39,11 +46,17 @@ type I18nContextValue = {
 const I18nContext = createContext<I18nContextValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(readStoredLocale);
+  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
-    localStorage.setItem(STORAGE_KEY, l);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY, l);
+    }
+  }, []);
+
+  useEffect(() => {
+    setLocaleState(readStoredLocale());
   }, []);
 
   useEffect(() => {

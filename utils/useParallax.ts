@@ -1,4 +1,4 @@
-import { useRef, useSyncExternalStore, type RefObject } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import { useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
 interface UseParallaxOptions {
@@ -27,13 +27,21 @@ export function useParallax(options: UseParallaxOptions = {}): {
   ref: RefObject<HTMLDivElement | null>;
   y: MotionValue<string>;
 } {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const reduceMotion = useReducedMotion();
   const isMobileLayout = useSyncExternalStore(
     subscribeMobileLayout,
     getMobileLayoutSnapshot,
     getMobileLayoutServerSnapshot,
   );
-  const distance = reduceMotion || isMobileLayout ? 0 : (options.distance ?? 40);
+  const distance = !mounted
+    ? 0
+    : reduceMotion || isMobileLayout
+      ? 0
+      : (options.distance ?? 40);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [`-${distance}px`, `${distance}px`]);

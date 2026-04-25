@@ -91,7 +91,7 @@ export default function ScrollStack({
       }
       return element.offsetTop;
     },
-    [useWindowScroll],
+    [useWindowScroll], 
   );
 
   const updateCardTransforms = useCallback(() => {

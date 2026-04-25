@@ -9,10 +9,8 @@ import "../ui/MacOSDock.css";
 export default function WhatsAppFloat() {
   const { t } = useI18n();
   const [hovered, setHovered] = useState(false);
-  const [dockBarPx, setDockBarPx] = useState(() => {
-    if (typeof window === "undefined") return 58;
-    return getDockBarHeightPx(getDockResponsiveConfig(window.innerWidth));
-  });
+  /** Keep SSR and first client render identical; sync to real dock metrics after mount. */
+  const [dockBarPx, setDockBarPx] = useState(58);
 
   useEffect(() => {
     const sync = () => {

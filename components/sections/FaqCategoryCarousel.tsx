@@ -1,5 +1,6 @@
 import { useCallback, useId, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import type { FaqCategory } from "../../locales/faqContent";
 import { cn } from "@/lib/utils";
@@ -83,7 +84,7 @@ export function FaqCategoryCarousel({
   selectedSuffix,
   regionAria,
 }: FaqCategoryCarouselProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useHydrationSafeReducedMotion();
   const uid = useId();
   const [index, setIndex] = useState(0);
   const n = slides.length;

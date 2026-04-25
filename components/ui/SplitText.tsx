@@ -57,10 +57,16 @@ export default function SplitText({
   const animationCompletedRef = useRef(false);
   const onCompleteRef = useRef(onLetterAnimationComplete);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  /** Defer GSAP DOM splits until after React hydrates (avoids SSR/client tree mismatch, especially on mobile). */
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     onCompleteRef.current = onLetterAnimationComplete;
   }, [onLetterAnimationComplete]);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (typeof document === "undefined" || !document.fonts) {
@@ -76,7 +82,7 @@ export default function SplitText({
 
   useGSAP(
     () => {
-      if (!ref.current || !text || !fontsLoaded) return;
+      if (!hydrated || !ref.current || !text || !fontsLoaded) return;
       if (animationCompletedRef.current) return;
       const el = ref.current;
 
@@ -163,7 +169,21 @@ export default function SplitText({
       };
     },
     {
-      dependencies: [text, delay, duration, ease, splitType, JSON.stringify(from), JSON.stringify(to), threshold, rootMargin, fontsLoaded, showCallback, triggerOnMount],
+      dependencies: [
+        hydrated,
+        text,
+        delay,
+        duration,
+        ease,
+        splitType,
+        JSON.stringify(from),
+        JSON.stringify(to),
+        threshold,
+        rootMargin,
+        fontsLoaded,
+        showCallback,
+        triggerOnMount,
+      ],
       scope: ref,
     },
   );

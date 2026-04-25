@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "../../contexts/I18nContext";
@@ -50,7 +51,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.08 });
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useHydrationSafeReducedMotion();
   const heroReady = splashReveal === undefined ? isInView : splashReveal;
 
   const slides = useMemo<HeroSlide[]>(
@@ -236,6 +237,8 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
   const carouselEase =
     isDesktop && transitionModeRef.current === "auto" ? HERO_CAROUSEL_EASE_AUTO_DESKTOP : HERO_CAROUSEL_EASE_MANUAL;
   const carouselTransition = reduceMotion || isDragging ? "none" : `transform ${carouselDurationMs}ms ${carouselEase}`;
+  const slideOffsetPercent = (100 * activeIndex) / slideCount;
+  const txPercent = slideOffsetPercent === 0 ? "0" : `-${slideOffsetPercent}`;
 
   const liveCaption = useMemo(() => {
     const s = slides[activeIndex];
@@ -317,7 +320,7 @@ export default function HeroSection({ splashReveal }: HeroSectionProps) {
             className="flex h-full"
             style={{
               width: `${slideCount * 100}%`,
-              transform: `translate3d(calc(-${(100 / slideCount) * activeIndex}% + ${dragPx}px), 0, 0)`,
+              transform: `translate3d(calc(${txPercent}% + ${dragPx}px), 0, 0)`,
               transition: carouselTransition,
               willChange: reduceMotion || isDragging ? undefined : "transform",
               WebkitBackfaceVisibility: "hidden",

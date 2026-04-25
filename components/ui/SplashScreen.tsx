@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { CLINIC_INFO } from "../../config/clinicData";
+import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import SplitText from "@/components/ui/SplitText";
 
 /** App logo served from `public/logo/logo.webp`. */
@@ -32,16 +33,14 @@ function computeSplashHoldMs(text: string): number {
 
 export default function SplashScreen({ onExitStart, onExitComplete }: SplashScreenProps = {}) {
   const [isVisible, setIsVisible] = useState(true);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useHydrationSafeReducedMotion();
   const onExitCompleteRef = useRef(onExitComplete);
   onExitCompleteRef.current = onExitComplete;
   const onExitStartRef = useRef(onExitStart);
   onExitStartRef.current = onExitStart;
 
   const splashTitle = CLINIC_INFO.name;
-  const splashTagline = "Refined Aesthetic & Wellness Care";
-
-  const holdMs = useMemo(() => computeSplashHoldMs(`${splashTitle} ${splashTagline}`), [splashTitle, splashTagline]);
+  const holdMs = useMemo(() => computeSplashHoldMs(splashTitle), [splashTitle]);
 
   useEffect(() => {
     const t = window.setTimeout(() => {
@@ -156,20 +155,6 @@ export default function SplashScreen({ onExitStart, onExitComplete }: SplashScre
                   textAlign="center"
                   triggerOnMount
                   showCallback={false}
-                />
-                <SplitText
-                  text={splashTagline}
-                  className="min-w-0 text-center text-xs font-medium uppercase tracking-[0.26em] text-white/85 sm:text-sm"
-                  delay={22}
-                  duration={0.8}
-                  ease="power2.out"
-                  splitType="chars"
-                  from={{ opacity: 0, y: 16 }}
-                  to={{ opacity: 1, y: 0 }}
-                  threshold={0.1}
-                  rootMargin="-100px"
-                  textAlign="center"
-                  triggerOnMount
                 />
               </motion.div>
             </div>

@@ -1,4 +1,5 @@
-import { motion, useReducedMotion, type MotionValue } from "framer-motion";
+import { motion, type MotionValue } from "framer-motion";
+import { useHydrationSafeReducedMotion } from "@/lib/useHydrationSafeReducedMotion";
 import { Star } from "lucide-react";
 import { useI18n } from "../../contexts/I18nContext";
 import { TESTIMONIALS } from "../../config/clinicData";
@@ -35,7 +36,7 @@ function toColumnItems(): TestimonialColumnItem[] {
 
 export default function TestimonialsSection({ yTestimonial }: TestimonialsSectionProps) {
   const { t } = useI18n();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useHydrationSafeReducedMotion();
   const columnData = toColumnItems();
   const firstColumn = columnData.slice(0, 3);
   const secondColumn = columnData.slice(3, 6);
@@ -51,7 +52,7 @@ export default function TestimonialsSection({ yTestimonial }: TestimonialsSectio
           y: yTestimonial,
         }}
       />
-      <div className="c13782461111111111ontainer-shell relative z-10">
+      <div className="container-shell relative z-10">
         <div className="mx-auto mb-10 max-w-3xl text-center">
           <h2 className="section-title mb-4">{t("testimonials.title")}</h2>
           <p className="text-slate-600">{t("testimonials.subtitle")}</p>
